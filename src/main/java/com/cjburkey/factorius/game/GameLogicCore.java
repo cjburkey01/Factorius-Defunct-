@@ -1,31 +1,48 @@
 package com.cjburkey.factorius.game;
 
+import org.joml.Vector3f;
 import org.lwjgl.Version;
 import org.lwjgl.opengl.GL11;
 import com.cjburkey.factorius.Factorius;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Numbers;
 import com.cjburkey.factorius.Static;
+import com.cjburkey.factorius.object.GameObject;
 import com.cjburkey.factorius.render.Renderer;
 import com.cjburkey.factorius.render.object.Mesh;
 import com.cjburkey.factorius.window.Window;
+import com.cjburkey.factorius.world.World;
 
 public class GameLogicCore implements IGameLogic {
 	
 	private Renderer renderer;
+	private World world;
 	
 	private float[] verts = {
-			-0.5f, 0.5f, 0.0f,
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f
+			-0.5f, 0.5f, 0.5f,		// V0
+			-0.5f, -0.5f, 0.5f,		// V1
+			0.5f, -0.5f, 0.5f,		// V2
+			0.5f, 0.5f, 0.5f,		// V3
+			-0.5f, 0.5f, -0.5f,		// V4
+			0.5f, 0.5f, -0.5f,		// V5
+			-0.5f, -0.5f, -0.5f,	// V6
+			0.5f, -0.5f, -0.5f		// V7
 	};
 	
 	private int[] tris = {
-			0, 1, 3, 3, 1, 2
+			0, 1, 3, 3, 1, 2,
+			4, 0, 3, 5, 4, 3,
+			3, 2, 7, 5, 3, 7,
+			6, 1, 0, 6, 0, 4,
+			2, 1, 6, 2, 6, 7,
+			7, 6, 4, 7, 4, 5
 	};
 	
 	private Mesh triangleTest;
+	
+	public GameLogicCore() {
+		world = new World();
+	}
 	
 	// -- LOGIC -- //
 	
@@ -52,6 +69,7 @@ public class GameLogicCore implements IGameLogic {
 		
 		triangleTest = new Mesh(verts, tris);
 		triangleTest.build();
+		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, -1.35f), triangleTest));
 		
 		renderer = new Renderer();
 		renderer.init();
@@ -59,7 +77,10 @@ public class GameLogicCore implements IGameLogic {
 
 	public void renderUpdate(Window window) {
 		window.setTitle(buildWindowTitle(window));
-		renderer.render(triangleTest);
+		GameObject[] objs = world.getObjectsInWorld();
+		for(GameObject obj : objs) {
+			renderer.render(window, obj);
+		}
 	}
 
 	public void renderCleanup(Window window) {

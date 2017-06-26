@@ -1,12 +1,18 @@
 package com.cjburkey.factorius.render.shader;
 
+import java.nio.FloatBuffer;
+import java.util.HashMap;
+import java.util.Map;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryStack;
 import com.cjburkey.factorius.Logger;
 
 public final class ShaderProgram {
 	
 	private final int progId;
 	private final int dumpLength = 1024;
+	private final Map<String, Integer> uniforms;
 	
 	private int vertex;
 	private int fragment;
@@ -16,6 +22,7 @@ public final class ShaderProgram {
 		if(progId == 0) {
 			Logger.info("Shader program could not be created.");
 		}
+		uniforms = new HashMap<>();
 	}
 	
 	public void createVertex(String code) throws Exception {
@@ -42,6 +49,22 @@ public final class ShaderProgram {
 		GL20.glValidateProgram(progId);
 		if(GL20.glGetProgrami(progId, GL20.GL_VALIDATE_STATUS) == 0) {
 			Logger.warn("Shader validation warning: " + GL20.glGetProgramInfoLog(progId, dumpLength));
+		}
+	}
+	
+	public void createUniform(String name) throws Exception {
+		int location = GL20.glGetUniformLocation(progId, name);
+		if(location < 0) {
+			throw new RuntimeException("Couldn't create uniform: " + name);
+		}
+		uniforms.put(name, location);
+	}
+	
+	public void setUniform(String name, Matrix4f value) {
+		try(MemoryStack stack = MemoryStack.stackPush()) {
+			FloatBuffer fb = stack.mallocFloat(16);
+			value.get(fb);
+			GL20.glUniformMatrix4fv(uniforms.get(name), false, fb);
 		}
 	}
 	

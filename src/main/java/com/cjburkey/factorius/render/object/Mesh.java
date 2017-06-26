@@ -19,6 +19,7 @@ public class Mesh {
 	private int coordVbo;
 	private int triVbo;
 	private int vertexCount;
+	private boolean built = false;
 	
 	public Mesh(float[] verts, int[] tris) {
 		this(null, verts, tris);
@@ -32,28 +33,31 @@ public class Mesh {
 	}
 	
 	public void build() {
-		FloatBuffer vertBuf = MemoryUtil.memAllocFloat(verts.length);
-		vertBuf.put(verts).flip();
-		
-		IntBuffer triBuf = MemoryUtil.memAllocInt(tris.length);
-		triBuf.put(tris).flip();
-		
-		coordVao = GL30.glGenVertexArrays();
-		GL30.glBindVertexArray(coordVao);
-		
-		coordVbo = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, coordVbo);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertBuf, GL15.GL_STATIC_DRAW);
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
-
-		triVbo = GL15.glGenBuffers();
-		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, triVbo);
-		GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, triBuf, GL15.GL_STATIC_DRAW);
-		
-		MemoryUtil.memFree(vertBuf);
-		MemoryUtil.memFree(triBuf);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-		GL30.glBindVertexArray(0);
+		if(!built) {
+			built = true;
+			FloatBuffer vertBuf = MemoryUtil.memAllocFloat(verts.length);
+			vertBuf.put(verts).flip();
+			
+			IntBuffer triBuf = MemoryUtil.memAllocInt(tris.length);
+			triBuf.put(tris).flip();
+			
+			coordVao = GL30.glGenVertexArrays();
+			GL30.glBindVertexArray(coordVao);
+			
+			coordVbo = GL15.glGenBuffers();
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, coordVbo);
+			GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertBuf, GL15.GL_STATIC_DRAW);
+			GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, 0, 0);
+	
+			triVbo = GL15.glGenBuffers();
+			GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, triVbo);
+			GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER, triBuf, GL15.GL_STATIC_DRAW);
+			
+			MemoryUtil.memFree(vertBuf);
+			MemoryUtil.memFree(triBuf);
+			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+			GL30.glBindVertexArray(0);
+		}
 	}
 	
 	public void render() {
@@ -88,6 +92,10 @@ public class Mesh {
 	
 	public boolean hasShader() {
 		return shader != null;
+	}
+	
+	public boolean isBuilt() {
+		return built;
 	}
 	
 	public ShaderProgram getShader() {
