@@ -88,9 +88,9 @@ public class GameLogicCore implements IGameLogic {
 		out.append(Static.SPACE);
 		out.append(Static.PIPE);
 		out.append(Static.SPACE);
-		out.append(window.getWidth());
+		out.append(Numbers.format(window.getWidth()));
 		out.append('x');
-		out.append(window.getHeight());
+		out.append(Numbers.format(window.getHeight()));
 		return out.toString();
 	}
 	
