@@ -2,6 +2,7 @@ package com.cjburkey.factorius;
 
 import org.lwjgl.Version;
 import com.cjburkey.factorius.game.GameLogicHandler;
+import com.cjburkey.factorius.io.Resources;
 import com.cjburkey.factorius.window.Window;
 
 public final class Factorius {
