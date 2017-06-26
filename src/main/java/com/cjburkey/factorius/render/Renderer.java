@@ -20,7 +20,11 @@ public class Renderer {
 	}
 	
 	public void render(Mesh mesh) {
-		basicShader.bind();
+		if(mesh.hasShader()) {
+			mesh.getShader().bind();
+		} else {
+			basicShader.bind();
+		}
 		mesh.render();
 		ShaderProgram.unbind();
 	}

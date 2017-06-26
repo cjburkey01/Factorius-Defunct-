@@ -6,16 +6,24 @@ import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
+import com.cjburkey.factorius.render.shader.ShaderProgram;
 
 public class Mesh {
 	
+	private final float[] verts;
+
+	private ShaderProgram shader;
 	private int vao;
 	private int vbo;
 	private int vertexCount;
 	
-	private float[] verts;
-	
 	public Mesh(float[] verts) {
+		this.shader = null;
+		this.verts = verts;
+	}
+	
+	public Mesh(ShaderProgram shader, float[] verts) {
+		this.shader = shader;
 		this.verts = verts;
 	}
 	
@@ -57,8 +65,20 @@ public class Mesh {
 		GL30.glDeleteVertexArrays(0);
 	}
 	
+	public void setShader(ShaderProgram shader) {
+		this.shader = shader;
+	}
+	
 	public int getVertexCount() {
 		return vertexCount;
+	}
+	
+	public boolean hasShader() {
+		return shader != null;
+	}
+	
+	public ShaderProgram getShader() {
+		return shader;
 	}
 	
 }
