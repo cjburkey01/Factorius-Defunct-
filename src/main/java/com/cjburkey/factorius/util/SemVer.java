@@ -1,5 +1,8 @@
 package com.cjburkey.factorius.util;
 
+import com.cjburkey.factorius.Logger;
+import com.cjburkey.factorius.Static;
+
 public final class SemVer {
 	
 	private static final SemVer EMPTY = new SemVer(-1, -1, -1);
@@ -47,6 +50,16 @@ public final class SemVer {
 	public boolean isEmpty() {
 		return equals(EMPTY);
 	}
+	
+	public String toString() {
+		StringBuilder out = new StringBuilder();
+		out.append(major);
+		out.append(Static.DOT);
+		out.append(minor);
+		out.append(Static.DOT);
+		out.append(patch);
+		return out.toString();
+	}
 
 	public static SemVer build(String version) {
 		String[] split = version.split("\\.");
@@ -56,7 +69,9 @@ public final class SemVer {
 				int minor = Integer.parseInt(split[1]);
 				int patch = Integer.parseInt(split[2]);
 				return new SemVer(major, minor, patch);
-			} catch(Exception e) {  }
+			} catch(Exception e) {
+				Logger.info("Couldn't build SemVer object: " + version);
+			}
 		}
 		return EMPTY;
 	}
