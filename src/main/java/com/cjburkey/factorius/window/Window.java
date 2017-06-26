@@ -5,13 +5,14 @@ import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.system.MemoryUtil;
+import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Static;
 
-public class Window {
+public final class Window {
 	
 	private long window;
 	private int width, height;
-	
+
 	public void initGlfw() {
 		GLFWErrorCallback.createPrint(System.err).set();
 		
@@ -22,9 +23,10 @@ public class Window {
 		GLFW.glfwDefaultWindowHints();
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GLFW.GLFW_FALSE);
 		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GLFW.GLFW_TRUE);
+		Logger.info("GLFW initialized.");
 	}
 	
-	public void createWindow() {
+	public void createWindow(boolean vsync) {
 		width = 300;
 		height = 300;
 		window = GLFW.glfwCreateWindow(width, height, "Factorius " + Static.FACTORIUS_VERSION, MemoryUtil.NULL, MemoryUtil.NULL);
@@ -40,11 +42,13 @@ public class Window {
 		
 		centerOnScreen();
 		GLFW.glfwMakeContextCurrent(window);
-		GLFW.glfwSwapInterval(1);
+		GLFW.glfwSwapInterval((vsync) ? 1 : 0);
+		Logger.info("Window created.");
 	}
 	
 	public void openWindow() {
 		GLFW.glfwShowWindow(window);
+		Logger.info("Window shown.");
 	}
 	
 	public void cleanup() {
@@ -52,6 +56,7 @@ public class Window {
 		GLFW.glfwDestroyWindow(window);
 		GLFW.glfwTerminate();
 		GLFW.glfwSetErrorCallback(null).free();
+		Logger.info("Window cleaned up.");
 	}
 	
 	public void setSize(int width, int height) {
@@ -66,6 +71,10 @@ public class Window {
 	public void perLoop() {
 		GLFW.glfwSwapBuffers(window);
 		GLFW.glfwPollEvents();
+	}
+	
+	public void setTitle(String title) {
+		GLFW.glfwSetWindowTitle(window, title);
 	}
 	
 	public long getIdentity() {

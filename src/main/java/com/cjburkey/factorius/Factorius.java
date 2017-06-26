@@ -1,49 +1,57 @@
 package com.cjburkey.factorius;
 
 import org.lwjgl.Version;
-import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
+import com.cjburkey.factorius.game.GameLogicHandler;
 import com.cjburkey.factorius.window.Window;
 
 public final class Factorius {
 	
-	private static Factorius self;
-	
+	public static Factorius self;
+
+	private boolean doVsync = true;
 	private Window window;
+	private Loops loops;
+	private GameLogicHandler logic;
 	
 	public static void main(String[] args) {
 		Logger.info("Factorius Version:\t" + Static.FACTORIUS_VERSION);
 		Logger.info("LWJGL Version:\t" + Version.getVersion());
-		Logger.info("Starting game");
+		Logger.info("Starting game.");
 		self = new Factorius();
 		self.start();
 		self.end();
+		Logger.info("Game closed.");
 	}
 	
 	private void start() {
 		init();
-		loop();
+		startLoops();
 	}
 	
 	private void init() {
+		logic = new GameLogicHandler();
+		logic.loadLogic();
 		window = new Window();
 		window.initGlfw();
-		window.createWindow();
+		window.createWindow(doVsync);
 		window.openWindow();
 	}
 	
-	private void loop() {
-		GL.createCapabilities();
-		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		
-		while(!window.shouldClose()) {
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			window.perLoop();
-		}
+	private void startLoops() {
+		loops = new Loops();
+		loops.startGame(window);
 	}
 	
 	private void end() {
 		window.cleanup();
+	}
+	
+	public GameLogicHandler getLogicHandler() {
+		return logic;
+	}
+	
+	public Loops getGameLoops() {
+		return loops;
 	}
 	
 }
