@@ -53,6 +53,7 @@ public final class Window {
 		halfScreen();
 		GLFW.glfwMakeContextCurrent(window);
 		GLFW.glfwSwapInterval((vsync) ? 1 : 0);
+		GLFW.glfwFocusWindow(window);
 		Logger.info("Window created.");
 	}
 	

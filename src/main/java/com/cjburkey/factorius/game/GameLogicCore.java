@@ -9,6 +9,7 @@ import com.cjburkey.factorius.Numbers;
 import com.cjburkey.factorius.Static;
 import com.cjburkey.factorius.object.GameObject;
 import com.cjburkey.factorius.render.Renderer;
+import com.cjburkey.factorius.render.Texture;
 import com.cjburkey.factorius.render.object.Mesh;
 import com.cjburkey.factorius.window.Window;
 import com.cjburkey.factorius.world.World;
@@ -30,13 +31,22 @@ public class GameLogicCore implements IGameLogic {
 	};
 	
 	private int[] tris = {
-			0, 1, 3, 3, 1, 2,
-			4, 0, 3, 5, 4, 3,
-			3, 2, 7, 5, 3, 7,
-			6, 1, 0, 6, 0, 4,
-			2, 1, 6, 2, 6, 7,
-			7, 6, 4, 7, 4, 5
+			0, 1, 3, 3, 1, 2,		// Front
+			4, 0, 3, 5, 4, 3,		// Top
+			3, 2, 7, 5, 3, 7,		// Right
+			6, 1, 0, 6, 0, 4,		// Left
+			2, 1, 6, 2, 6, 7,		// Bottom
+			7, 6, 4, 7, 4, 5		// Back
 	};
+	
+	private float[] uv = {
+			0.0f, 0.0f,
+			1.0f, 0.0f,
+			1.0f, 1.0f,
+			0.0f, 1.0f,
+	};
+	
+	private Texture texture = new Texture("factorius:texture/basic/block_stone.png");
 	
 	private Mesh triangleTest;
 	
@@ -67,7 +77,7 @@ public class GameLogicCore implements IGameLogic {
 		Logger.info("OpenGL:\t\t" + GL11.glGetString(GL11.GL_VERSION));
 		Logger.blank();
 		
-		triangleTest = new Mesh(verts, tris);
+		triangleTest = new Mesh(verts, tris, uv, texture);
 		triangleTest.build();
 		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, -1.35f), triangleTest));
 		
