@@ -17,10 +17,12 @@ public class GameLogicCore implements IGameLogic {
 	private float[] verts = {
 			-0.5f, 0.5f, 0.0f,
 			-0.5f, -0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			0.5f, 0.5f, 0.0f,
-			-0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f
+			0.5f, -0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f
+	};
+	
+	private int[] tris = {
+			0, 1, 3, 3, 1, 2
 	};
 	
 	private Mesh triangleTest;
@@ -48,7 +50,7 @@ public class GameLogicCore implements IGameLogic {
 		Logger.info("OpenGL:\t\t" + GL11.glGetString(GL11.GL_VERSION));
 		Logger.blank();
 		
-		triangleTest = new Mesh(verts);
+		triangleTest = new Mesh(verts, tris);
 		triangleTest.build();
 		
 		renderer = new Renderer();
