@@ -4,7 +4,9 @@ import org.lwjgl.glfw.Callbacks;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.system.MemoryUtil;
+import com.cjburkey.factorius.Factorius;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Static;
 
@@ -40,7 +42,11 @@ public final class Window {
 			}
 		});
 		
-		centerOnScreen();
+		GLFW.glfwSetWindowSizeCallback(window, (win, width, height) -> {
+			updateSize(width, height);
+		});
+
+		halfScreen();
 		GLFW.glfwMakeContextCurrent(window);
 		GLFW.glfwSwapInterval((vsync) ? 1 : 0);
 		Logger.info("Window created.");
@@ -60,7 +66,9 @@ public final class Window {
 	}
 	
 	public void setSize(int width, int height) {
-		
+		GLFW.glfwSetWindowSize(window, width, height);
+		updateSize(width, height);
+		centerOnScreen();
 	}
 	
 	public void centerOnScreen() {
@@ -83,6 +91,27 @@ public final class Window {
 	
 	public boolean shouldClose() {
 		return GLFW.glfwWindowShouldClose(window);
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
+	}
+	
+	private void halfScreen() {
+		GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
+		setSize(vidmode.width() / 2, vidmode.height() / 2);
+	}
+	
+	private void updateSize(int width, int height) {
+		this.width = width;
+		this.height = height;
+		if(Factorius.self.getGameLoops() != null && Factorius.self.getGameLoops().hasCaps()) {
+			GL11.glViewport(0, 0, width, height);
+		}
 	}
 	
 }

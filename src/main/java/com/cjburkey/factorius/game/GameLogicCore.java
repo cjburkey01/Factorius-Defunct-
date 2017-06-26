@@ -29,14 +29,14 @@ public class GameLogicCore implements IGameLogic {
 	}
 
 	public void renderUpdate(Window window) {
-		window.setTitle(buildWindowTitle());
+		window.setTitle(buildWindowTitle(window));
 	}
 
 	public void renderCleanup(Window window) {
 		
 	}
 	
-	private String buildWindowTitle() {
+	private String buildWindowTitle(Window window) {
 		StringBuilder out = new StringBuilder();
 		out.append(Static.WINDOW_TITLE);
 		out.append(Static.SPACE);
@@ -54,6 +54,12 @@ public class GameLogicCore implements IGameLogic {
 		out.append(Static.COLON);
 		out.append(Static.SPACE);
 		out.append(Numbers.format(Factorius.self.getGameLoops().getFps()));
+		out.append(Static.SPACE);
+		out.append(Static.PIPE);
+		out.append(Static.SPACE);
+		out.append(window.getWidth());
+		out.append('x');
+		out.append(window.getHeight());
 		return out.toString();
 	}
 	
