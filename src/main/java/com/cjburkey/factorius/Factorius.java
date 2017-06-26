@@ -1,8 +1,6 @@
 package com.cjburkey.factorius;
 
-import org.lwjgl.Version;
 import com.cjburkey.factorius.game.GameLogicHandler;
-import com.cjburkey.factorius.io.Resources;
 import com.cjburkey.factorius.window.Window;
 
 public final class Factorius {
@@ -15,8 +13,6 @@ public final class Factorius {
 	private GameLogicHandler logic;
 	
 	public static void main(String[] args) {
-		Logger.info("Factorius Version:\t" + Static.FACTORIUS_VERSION);
-		Logger.info("LWJGL Version:\t" + Version.getVersion());
 		Logger.info("Starting game.");
 		self = new Factorius();
 		self.start();

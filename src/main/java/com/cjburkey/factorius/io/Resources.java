@@ -42,7 +42,7 @@ public final class Resources {
 		return null;
 	}
 	
-	public static String[] getLines(String loc) {
+	public static String[] getResourceAsLines(String loc) {
 		List<String> out = new ArrayList<>();
 		InputStream stream = getResource(loc);
 		if(stream != null) {
@@ -55,9 +55,9 @@ public final class Resources {
 		return out.toArray(new String[out.size()]);
 	}
 	
-	public static String getFile(String loc) {
+	public static String getResourceAsString(String loc) {
 		StringBuilder out = new StringBuilder();
-		String[] lines = getLines(loc);
+		String[] lines = getResourceAsLines(loc);
 		for(String line : lines) {
 			out.append(line);
 			out.append('\n');

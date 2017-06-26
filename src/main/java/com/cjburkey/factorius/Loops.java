@@ -41,12 +41,12 @@ public final class Loops {
 		Logger.info("Starting render loop.");
 		while(running) {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			window.perLoop();
 			if(window.shouldClose()) {
 				stopGame();
 			}
 			Factorius.self.getLogicHandler().foreach((e) -> e.renderUpdate(window));
-			
+
+			window.perLoop();
 			frames ++;
 			long now = System.nanoTime();
 			if(now - lastFrameCheck >= Static.NANOS_PER_SECOND) {
