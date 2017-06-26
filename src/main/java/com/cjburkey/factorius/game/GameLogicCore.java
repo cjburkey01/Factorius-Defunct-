@@ -1,5 +1,6 @@
 package com.cjburkey.factorius.game;
 
+import org.lwjgl.opengl.GL11;
 import com.cjburkey.factorius.Factorius;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Numbers;
@@ -25,7 +26,7 @@ public class GameLogicCore implements IGameLogic {
 	// -- RENDER -- //
 
 	public void renderInit(Window window) {
-		
+		Logger.info("OpenGL:\t\t" + GL11.glGetString(GL11.GL_VERSION));
 	}
 
 	public void renderUpdate(Window window) {

@@ -7,14 +7,18 @@ import com.cjburkey.factorius.window.Window;
 
 public final class Loops {
 	
+	private final int targetUps = 60;
+	private final double deltaTiming = (double) Static.NANOS_PER_SECOND / (double) targetUps;
+	
 	private GLCapabilities caps;
 	
 	private Thread gameLoop;
 	private boolean running = true;
 	
 	private long lastFrameCheck = 0;
-	private long frames = 0;
 	private long lastUpdateCheck = 0;
+	private long updateTimer;
+	private long frames = 0;
 	private long updates = 0;
 	
 	private long fps = 0;
@@ -59,18 +63,26 @@ public final class Loops {
 		Factorius.self.getLogicHandler().foreach((e) -> e.gameInit());
 		Logger.info("Starting game loop.");
 		while(running) {
-			Factorius.self.getLogicHandler().foreach((e) -> e.gameTick());
-			
-			updates ++;
 			long now = System.nanoTime();
-			if(now - lastUpdateCheck >= Static.NANOS_PER_SECOND) {
-				lastUpdateCheck = now;
-				ups = updates;
-				updates = 0;
+			if(now - updateTimer >= deltaTiming) {
+				updateTimer = now;
+				tick();
 			}
 		}
 		Factorius.self.getLogicHandler().foreach((e) -> e.gameCleanup());
 		Logger.info("Finished game loop.");
+	}
+	
+	private void tick() {
+		Factorius.self.getLogicHandler().foreach((e) -> e.gameTick());
+		
+		updates ++;
+		long now = System.nanoTime();
+		if(now - lastUpdateCheck >= Static.NANOS_PER_SECOND) {
+			lastUpdateCheck = now;
+			ups = updates;
+			updates = 0;
+		}
 	}
 	
 	private void stopGame() {
