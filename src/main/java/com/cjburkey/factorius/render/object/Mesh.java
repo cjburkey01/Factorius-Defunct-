@@ -49,7 +49,7 @@ public class Mesh {
 		GL30.glBindVertexArray(vao);
 		GL20.glEnableVertexAttribArray(0);
 		
-		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, 3);
+		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, vertexCount);
 		
 		GL20.glDisableVertexAttribArray(0);
 		GL30.glBindVertexArray(0);

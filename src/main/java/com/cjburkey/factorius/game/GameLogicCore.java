@@ -15,7 +15,10 @@ public class GameLogicCore implements IGameLogic {
 	private Renderer renderer;
 	
 	private float[] verts = {
-			0.0f, 0.5f, 0.0f,
+			-0.5f, 0.5f, 0.0f,
+			-0.5f, -0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f,
+			0.5f, 0.5f, 0.0f,
 			-0.5f, -0.5f, 0.0f,
 			0.5f, -0.5f, 0.0f
 	};
