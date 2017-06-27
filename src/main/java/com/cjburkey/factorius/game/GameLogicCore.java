@@ -1,6 +1,5 @@
 package com.cjburkey.factorius.game;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.Version;
@@ -50,9 +49,7 @@ public class GameLogicCore implements IGameLogic {
 	public void gameTick() {
 		if(camMove != null) {
 			Vector3f move = new Vector3f(camMove.getCameraChange());
-			Vector2f rotVec = new Vector2f(camMove.getDisplayVector());
 			camera.move(move.x * cameraSpeed, move.y * cameraSpeed, move.z * cameraSpeed);
-			camera.rotate(rotVec.x * cameraRotateSpeed, rotVec.y * cameraRotateSpeed, 0);
 		}
 		
 		if(input != null) {
@@ -90,7 +87,7 @@ public class GameLogicCore implements IGameLogic {
 		for(GameObject obj : objs) {
 			renderer.render(window, camera, obj);
 		}
-		camMove.render(input);
+		camMove.render(cameraRotateSpeed, cameraSpeed, window, input);
 	}
 
 	public void renderCleanup(Window window) {

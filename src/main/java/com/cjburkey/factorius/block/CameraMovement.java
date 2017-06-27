@@ -9,45 +9,54 @@ import com.cjburkey.factorius.render.Camera;
 import com.cjburkey.factorius.window.Window;
 
 public class CameraMovement {
-	
-	private final Vector2d previousPos;
-	private final Vector2d currentPos;
-	private final Vector2f displVec;
+
+	private final Vector2d cursorCurrent;
+	private final Vector2d cursorPast;
+	private final Vector2f cursorDelta;
 	private final Vector3f camChange;
 	private final Camera camera;
 	
+	private final Vector2d center;
+	
 	public CameraMovement(Camera camera) {
-		previousPos = new Vector2d(-1, -1);
-		currentPos = new Vector2d();
-		displVec = new Vector2f();
+		cursorCurrent = new Vector2d();
+		cursorPast = new Vector2d();
+		cursorDelta = new Vector2f();
 		camChange = new Vector3f();
+		center = new Vector2d();
 		this.camera = camera;
 	}
 	
 	public void init(Window window) {
-		GLFW.glfwSetCursorPosCallback(window.getIdentity(), (win, x, y) -> {
-			currentPos.x = x;
-			currentPos.y = y;
-		});
+		center.set(new Vector2d((double) window.getWidth() / 2.0d, (double) window.getHeight() / 2.0d));
+		
+		GLFW.glfwSetInputMode(window.getIdentity(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 	}
 	
-	public void render(InputHandler input) {
-		displVec.x = 0;
-		displVec.y = 0;
+	// TODO: FIX FPS CAMERA, IT JITTERS
+	public void render(float rotateSpeed, float moveSpeed, Window window, InputHandler input) {
+		double[] x = new double[1];
+		double[] y = new double[1];
+		GLFW.glfwGetCursorPos(window.getIdentity(), x, y);
+		cursorCurrent.set(x[0], y[0]);
 		
-		double deltaX = currentPos.x - previousPos.x;
-		double deltaY = currentPos.y - previousPos.y;
-		boolean rotateX = deltaX != 0;
-		boolean rotateY = deltaY != 0;
-		if(rotateX) {
-			displVec.y = (float) deltaX;
-		}
-		if(rotateY) {
-			displVec.x = (float) deltaY;
+		double deltaX = cursorCurrent.x - center.x;
+		double deltaY = cursorCurrent.y - center.y;
+		
+		boolean rotX = cursorCurrent.x != cursorPast.x;
+		boolean rotY = cursorCurrent.y != cursorPast.y;
+		
+		if(rotX) {
+			camera.rotate(0.0f, (float) deltaX * rotateSpeed, 0.0f);
 		}
 		
-		previousPos.x = currentPos.x;
-		previousPos.y = currentPos.y;
+		if(rotY) {
+			camera.rotate((float) deltaY * rotateSpeed, 0.0f, 0.0f);
+		}
+		
+		cursorPast.set(cursorCurrent);
+		
+		GLFW.glfwSetCursorPos(window.getIdentity(), center.x, center.y);
 		
 		doMovement(input);
 	}
@@ -76,8 +85,8 @@ public class CameraMovement {
 		}
 	}
 	
-	public Vector2f getDisplayVector() {
-		return displVec;
+	public Vector2f getCursorDelta() {
+		return cursorDelta;
 	}
 	
 	public Vector3f getCameraChange() {
