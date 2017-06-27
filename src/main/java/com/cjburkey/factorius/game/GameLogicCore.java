@@ -1,17 +1,21 @@
 package com.cjburkey.factorius.game;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 import org.lwjgl.Version;
+import org.lwjgl.glfw.GLFW;
 import org.lwjgl.opengl.GL11;
 import com.cjburkey.factorius.Factorius;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Numbers;
 import com.cjburkey.factorius.Static;
 import com.cjburkey.factorius.block.Blocks;
+import com.cjburkey.factorius.block.CameraMovement;
 import com.cjburkey.factorius.chunk.ChunkData;
 import com.cjburkey.factorius.chunk.ChunkGenerator;
 import com.cjburkey.factorius.chunk.MeshChunk;
+import com.cjburkey.factorius.input.InputHandler;
 import com.cjburkey.factorius.object.GameObject;
 import com.cjburkey.factorius.render.Camera;
 import com.cjburkey.factorius.render.Renderer;
@@ -20,9 +24,14 @@ import com.cjburkey.factorius.world.World;
 
 public class GameLogicCore implements IGameLogic {
 	
+	private final float cameraSpeed = 0.1f;
+	private final float cameraRotateSpeed = 1.0f;
+	
 	private Renderer renderer;
+	private InputHandler input;
 	private World world;
 	private Camera camera;
+	private CameraMovement camMove;
 	
 	public GameLogicCore() {
 		world = new World();
@@ -39,7 +48,16 @@ public class GameLogicCore implements IGameLogic {
 	}
 
 	public void gameTick() {
+		if(camMove != null) {
+			Vector3f move = new Vector3f(camMove.getCameraChange());
+			Vector2f rotVec = new Vector2f(camMove.getDisplayVector());
+			camera.move(move.x * cameraSpeed, move.y * cameraSpeed, move.z * cameraSpeed);
+			camera.rotate(rotVec.x * cameraRotateSpeed, rotVec.y * cameraRotateSpeed, 0);
+		}
 		
+		if(input != null) {
+			input.gameTick();
+		}
 	}
 
 	public void gameCleanup() {
@@ -57,14 +75,22 @@ public class GameLogicCore implements IGameLogic {
 		
 		renderer = new Renderer();
 		renderer.init();
+		input = new InputHandler();
+		input.renderInit(window);
+		camMove = new CameraMovement(camera);
+		camMove.init(window);
 	}
 
 	public void renderUpdate(Window window) {
+		if(input.keyUp(GLFW.GLFW_KEY_ESCAPE)) {
+			Factorius.self.stopGame();
+		}
 		window.setTitle(buildWindowTitle(window));
 		GameObject[] objs = world.getObjectsInWorld();
 		for(GameObject obj : objs) {
 			renderer.render(window, camera, obj);
 		}
+		camMove.render(input);
 	}
 
 	public void renderCleanup(Window window) {

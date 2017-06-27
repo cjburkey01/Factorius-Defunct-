@@ -59,14 +59,26 @@ public class MeshChunk {
 	private static final Vector3f right = new Vector3f(1, 0, 0);
 	private static final Vector3f forward = new Vector3f(0, 0, 1);
 	private static void addBlock(Block block, int x, int y, int z, ChunkData chunk, List<Vector3f> verts, List<Integer> tris, List<Vector2f> uvs) {
-		addFace(block, new Vector3f(x, y, z), up, forward, false, verts, tris, uvs);		// Left
-		addFace(block, new Vector3f(x + 1, y, z), up, forward, true, verts, tris, uvs);		// Right
-
-		addFace(block, new Vector3f(x, y, z), forward, right, false, verts, tris, uvs);		// Bottom
-		addFace(block, new Vector3f(x, y + 1, z), forward, right, true, verts, tris, uvs);	// Top
-
-		addFace(block, new Vector3f(x, y, z), up, right, true, verts, tris, uvs);			// Front
-		addFace(block, new Vector3f(x, y, z + 1), up, right, false, verts, tris, uvs);		// Back
+		if(!fullBlockAt(chunk, x - 1, y, z)) {
+			addFace(block, new Vector3f(x, y, z), up, forward, false, verts, tris, uvs);		// Left
+		}
+		if(!fullBlockAt(chunk, x + 1, y, z)) {
+			addFace(block, new Vector3f(x + 1, y, z), up, forward, true, verts, tris, uvs);		// Right
+		}
+		
+		if(!fullBlockAt(chunk, x, y - 1, z)) {
+			addFace(block, new Vector3f(x, y, z), forward, right, false, verts, tris, uvs);		// Bottom
+		}
+		if(!fullBlockAt(chunk, x, y + 1, z)) {
+			addFace(block, new Vector3f(x, y + 1, z), forward, right, true, verts, tris, uvs);	// Top
+		}
+		
+		if(!fullBlockAt(chunk, x, y, z - 1)) {
+			addFace(block, new Vector3f(x, y, z), up, right, true, verts, tris, uvs);			// Front
+		}
+		if(!fullBlockAt(chunk, x, y, z + 1)) {
+			addFace(block, new Vector3f(x, y, z + 1), up, right, false, verts, tris, uvs);		// Back
+		}
 	}
 	
 	private static void addFace(Block block, Vector3f corner, Vector3f up, Vector3f right, boolean rev, List<Vector3f> verts, List<Integer> tris, List<Vector2f> uvs) {
@@ -106,10 +118,8 @@ public class MeshChunk {
 	
 	private static boolean fullBlockAt(ChunkData chunk, int x, int y, int z) {
 		Block b = chunk.getBlockAt(x, y, z);
-		if(b != null) {
-			return b.isFullBlock();
-		}
-		return false;
+		if(b == null) return false;
+		return b.isFullBlock();
 	}
 	
 }

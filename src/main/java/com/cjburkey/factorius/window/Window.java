@@ -40,12 +40,6 @@ public final class Window {
 			throw new RuntimeException("GLFW window could not be created.");
 		}
 		
-		GLFW.glfwSetKeyCallback(window, (window, key, code, action, mods) -> {
-			if(key == GLFW.GLFW_KEY_ESCAPE && action == GLFW.GLFW_RELEASE) {
-				GLFW.glfwSetWindowShouldClose(window, true);
-			}
-		});
-		
 		GLFW.glfwSetWindowSizeCallback(window, (win, width, height) -> {
 			updateSize(width, height);
 		});

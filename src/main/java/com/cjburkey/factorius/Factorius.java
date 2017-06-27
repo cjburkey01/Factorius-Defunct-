@@ -22,6 +22,10 @@ public final class Factorius {
 		Logger.info("Game closed.");
 	}
 	
+	public void stopGame() {
+		loops.stopGame();
+	}
+	
 	private void start() {
 		init();
 		startLoops();

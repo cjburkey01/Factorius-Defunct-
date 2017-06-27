@@ -85,7 +85,7 @@ public final class Loops {
 		}
 	}
 	
-	private void stopGame() {
+	public void stopGame() {
 		running = false;
 	}
 	
