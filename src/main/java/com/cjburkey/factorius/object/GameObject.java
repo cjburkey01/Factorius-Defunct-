@@ -38,6 +38,12 @@ public class GameObject {
 		}
 	}
 	
+	public void renderCleanup() {
+		if(mesh != null) {
+			mesh.cleanup();
+		}
+	}
+	
 	public void setMesh(Mesh mesh) {
 		this.mesh = mesh;
 	}

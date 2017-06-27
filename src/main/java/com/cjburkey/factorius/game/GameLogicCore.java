@@ -1,16 +1,19 @@
 package com.cjburkey.factorius.game;
 
 import org.joml.Vector3f;
+import org.joml.Vector3i;
 import org.lwjgl.Version;
 import org.lwjgl.opengl.GL11;
 import com.cjburkey.factorius.Factorius;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Numbers;
 import com.cjburkey.factorius.Static;
+import com.cjburkey.factorius.block.Blocks;
+import com.cjburkey.factorius.chunk.ChunkData;
+import com.cjburkey.factorius.chunk.ChunkGenerator;
+import com.cjburkey.factorius.chunk.MeshChunk;
 import com.cjburkey.factorius.object.GameObject;
 import com.cjburkey.factorius.render.Renderer;
-import com.cjburkey.factorius.render.Texture;
-import com.cjburkey.factorius.render.object.Mesh;
 import com.cjburkey.factorius.window.Window;
 import com.cjburkey.factorius.world.World;
 
@@ -19,7 +22,7 @@ public class GameLogicCore implements IGameLogic {
 	private Renderer renderer;
 	private World world;
 	
-	private float[] verts = {
+	/*private float[] verts = {
 			-0.5f, 0.5f, 0.5f,		// V0
 			-0.5f, -0.5f, 0.5f,		// V1
 			0.5f, -0.5f, 0.5f,		// V2
@@ -48,7 +51,7 @@ public class GameLogicCore implements IGameLogic {
 	
 	private Texture texture = new Texture("factorius:texture/block/block_stone.png");
 	
-	private Mesh triangleTest;
+	private Mesh triangleTest;*/
 	
 	public GameLogicCore() {
 		world = new World();
@@ -57,7 +60,10 @@ public class GameLogicCore implements IGameLogic {
 	// -- LOGIC -- //
 	
 	public void gameInit() {
-		
+		Blocks.init();
+		ChunkData test = new ChunkData(new Vector3i());
+		ChunkGenerator.generate(test);
+		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, -1.35f), MeshChunk.buildChunkMesh(test)));
 	}
 
 	public void gameTick() {
@@ -77,10 +83,6 @@ public class GameLogicCore implements IGameLogic {
 		Logger.info("OpenGL:\t\t" + GL11.glGetString(GL11.GL_VERSION));
 		Logger.blank();
 		
-		triangleTest = new Mesh(verts, tris, uv, texture);
-		triangleTest.build();
-		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, -1.35f), triangleTest));
-		
 		renderer = new Renderer();
 		renderer.init();
 	}
@@ -95,7 +97,10 @@ public class GameLogicCore implements IGameLogic {
 
 	public void renderCleanup(Window window) {
 		renderer.cleanup();
-		triangleTest.cleanup();
+		GameObject[] objs = world.getObjectsInWorld();
+		for(GameObject obj : objs) {
+			obj.renderCleanup();
+		}
 	}
 	
 	private String buildWindowTitle(Window window) {

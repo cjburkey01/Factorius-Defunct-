@@ -18,6 +18,7 @@ import com.cjburkey.factorius.io.Resources;
 public class LocalizationManager {
 	
 	private final List<Localization> locals;
+	private Localization current;
 	
 	public LocalizationManager() {
 		locals = new ArrayList<>();
@@ -40,11 +41,13 @@ public class LocalizationManager {
 				}
 				scanner.close();
 				for(String line : lines) {
-					String[] split = line.split("=");
-					if(split.length == 2) {
-						keys.put(split[0].trim(), split[1].trim());
-					} else {
-						Logger.warn("  Couldn't read \"" + line + "\"");
+					if(!line.trim().isEmpty()) {
+						String[] split = line.split("=");
+						if(split.length == 2) {
+							keys.put(split[0].trim(), split[1].trim());
+						} else {
+							Logger.warn("  Couldn't read \"" + line + "\"");
+						}
 					}
 				}
 				Localization local = new Localization(unlocalizedName, localizedName);
@@ -57,7 +60,19 @@ public class LocalizationManager {
 				Logger.warn("  Couldn't load localization at: " + path);
 			}
 		}
+		if(locals.size() < 1) {
+			Logger.warn("There aren't any languages! May the lord save our souls. How am I talking?");
+			System.exit(-69);
+		}
+		current = locals.get(0);
 		Logger.info("Loaded localizations.");
+	}
+	
+	public String get(String key) {
+		if(current != null && current.hasKey(key)) {
+			current.getString(key);
+		}
+		return key;
 	}
 	
 }

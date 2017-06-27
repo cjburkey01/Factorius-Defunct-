@@ -39,9 +39,6 @@ public class Renderer {
 	
 	public void render(Window window, GameObject object) {
 		if(object != null && object.getMesh() != null) {
-			object.getRotation().y += 1.0f;
-			object.getRotation().z += 0.375f;
-			if(object.getRotation().x >= 360) object.getRotation().x = 0;
 			projectionMatrix = transformation.getProjectionMatrix(FOV, window, NEAR, FAR);
 			worldMatrix = transformation.getWorldMatrix(object.getPosition(), object.getRotation(), object.getScale());
 			
