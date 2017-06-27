@@ -23,7 +23,7 @@ import com.cjburkey.factorius.world.World;
 
 public class GameLogicCore implements IGameLogic {
 	
-	private final float cameraSpeed = 0.1f;
+	private final float cameraSpeed = 0.05f;
 	private final float cameraRotateSpeed = 1.0f;
 	
 	private Renderer renderer;
