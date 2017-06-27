@@ -54,8 +54,9 @@ public class Renderer {
 			}
 			
 			projectionMatrix = transformation.getProjectionMatrix(FOV, window, NEAR, FAR);
+			basicShader.setUniform("projectionMatrix", projectionMatrix);
+			
 			viewMatrix = transformation.getViewMatrix(camera);
-			Matrix4f modelViewMatrix = transformation.getModelViewMatrix(object, viewMatrix);
 			
 			basicShader.setUniform("ambientLight", ambientLight);
 			basicShader.setUniform("specularPower", 10.0f);
@@ -67,10 +68,10 @@ public class Renderer {
 			lightPos.x = aux.y;
 			lightPos.z = aux.z;
 			basicShader.setUniform("pointLight", currentLight);
-			
-			basicShader.setUniform("projectionMatrix", projectionMatrix);
-			basicShader.setUniform("modelViewMatrix", modelViewMatrix);
 			basicShader.setUniform("texture_sampler", 0);
+
+			Matrix4f modelViewMatrix = transformation.getModelViewMatrix(object, viewMatrix);
+			basicShader.setUniform("modelViewMatrix", modelViewMatrix);
 			basicShader.setUniform("material", object.getMesh().getMaterial());
 			
 			object.render();

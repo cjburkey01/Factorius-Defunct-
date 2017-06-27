@@ -47,7 +47,7 @@ public class GameLogicCore implements IGameLogic {
 		camera = new Camera();
 		ChunkData test = new ChunkData(new Vector3i());
 		ChunkGenerator.generate(test);
-		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, -1.35f), MeshChunk.buildChunkMesh(test)));
+		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, 0.0f), MeshChunk.buildChunkMesh(test)));
 	}
 
 	public void gameTick() {
@@ -81,12 +81,12 @@ public class GameLogicCore implements IGameLogic {
 		camMove = new CameraMovement(camera, cameraSpeed, cameraRotateSpeed);
 		camMove.init(window);
 		
-		ambientLight = new Vector3f(0.0f, 0.0f, 0.0f);
+		ambientLight = new Vector3f(0.8f, 0.8f, 0.8f);
 		Vector3f lightColor = new Vector3f(1.0f, 1.0f, 1.0f);
-		Vector3f lightPosition = new Vector3f(0.0f, 0.0f, 0.0f);
+		Vector3f lightPosition = new Vector3f(0.0f, 0.0f, 2.0f);
 		float lightIntensity = 10.0f;
 		pointLight = new PointLight(lightColor, lightPosition, lightIntensity);
-		PointLight.Attenuation att = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
+		PointLight.Attenuation att = new PointLight.Attenuation(5.0f, 5.0f, 0.0f);
 		pointLight.setAttenuation(att);
 		
 		lightPosition = new Vector3f(-1.0f, 0.0f, 0.0f);

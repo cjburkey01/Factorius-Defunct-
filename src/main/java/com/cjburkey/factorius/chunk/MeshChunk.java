@@ -53,7 +53,7 @@ public class MeshChunk {
 			i ++;
 		}
 		
-		return new Mesh(outVerts, outTris, outUvs, new Material(new Texture("factorius:texture/block/block_stone.png"), 0.2f));
+		return new Mesh(outVerts, outTris, outUvs, new Material(new Texture("factorius:texture/block/block_stone.png"), 1.0f));
 	}
 	
 	private static final Vector3f up = new Vector3f(0, 1, 0);

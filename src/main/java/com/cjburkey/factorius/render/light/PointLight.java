@@ -4,102 +4,100 @@ import org.joml.Vector3f;
 
 public class PointLight {
 	
-	private final Vector3f color;
-	private final Vector3f position;
-	private float intensity;
-	private final Attenuation attenuation;
-	
-	public PointLight(Vector3f color, Vector3f position, float intensity) {
-		this.color = color;
-		this.position = position;
-		this.intensity = intensity;
-		attenuation = new Attenuation(1.0f, 0.0f, 0.0f);
-	}
+	private Vector3f color;
 
-	public PointLight(Vector3f color, Vector3f position, float intensity, Attenuation attenuation) {
-		this.color = color;
-		this.position = position;
-		this.intensity = intensity;
-		this.attenuation = attenuation;
-	}
-	
-	public PointLight(PointLight old) {
-		color = old.color;
-		position = old.position;
-		intensity = old.intensity;
-		attenuation = old.attenuation;
-	}
-	
-	public void setColor(Vector3f c) {
-		color.set(c);
-	}
-	
-	public void setPosition(Vector3f pos) {
-		position.set(pos);
-	}
-	
-	public void setIntensity(float inten) {
-		intensity = inten;
-	}
-	
-	public void setAttenuation(Attenuation att) {
-		attenuation.constant = att.constant;
-		attenuation.linear = att.linear;
-		attenuation.exponent = att.exponent;
-	}
+    private Vector3f position;
 
-	public Vector3f getColor() {
-		return color;
-	}
+    private float intensity;
 
-	public Vector3f getPosition() {
-		return position;
-	}
+    private Attenuation attenuation;
+    
+    public PointLight(Vector3f color, Vector3f position, float intensity) {
+        attenuation = new Attenuation(1, 0, 0);
+        this.color = color;
+        this.position = position;
+        this.intensity = intensity;
+    }
 
-	public float getIntensity() {
-		return intensity;
-	}
+    public PointLight(Vector3f color, Vector3f position, float intensity, Attenuation attenuation) {
+        this(color, position, intensity);
+        this.attenuation = attenuation;
+    }
 
-	public Attenuation getAttenuation() {
-		return attenuation;
-	}
+    public PointLight(PointLight pointLight) {
+        this(new Vector3f(pointLight.getColor()), new Vector3f(pointLight.getPosition()),
+                pointLight.getIntensity(), pointLight.getAttenuation());
+    }
 
-	public static class Attenuation {
-		
-		private float constant;
-		private float linear;
-		private float exponent;
-		
-		public Attenuation(float constant, float linear, float exponent) {
-			this.constant = constant;
-			this.linear = linear;
-			this.exponent = exponent;
-		}
+    public Vector3f getColor() {
+        return color;
+    }
 
-		public void setConstant(float constant) {
-			this.constant = constant;
-		}
+    public void setColor(Vector3f color) {
+        this.color = color;
+    }
 
-		public void setLinear(float linear) {
-			this.linear = linear;
-		}
+    public Vector3f getPosition() {
+        return position;
+    }
 
-		public void setExponent(float exponent) {
-			this.exponent = exponent;
-		}
+    public void setPosition(Vector3f position) {
+        this.position = position;
+    }
 
-		public float getConstant() {
-			return constant;
-		}
+    public float getIntensity() {
+        return intensity;
+    }
 
-		public float getLinear() {
-			return linear;
-		}
+    public void setIntensity(float intensity) {
+        this.intensity = intensity;
+    }
 
-		public float getExponent() {
-			return exponent;
-		}
-		
-	}
+    public Attenuation getAttenuation() {
+        return attenuation;
+    }
+
+    public void setAttenuation(Attenuation attenuation) {
+        this.attenuation = attenuation;
+    }
+
+    public static class Attenuation {
+
+        private float constant;
+
+        private float linear;
+
+        private float exponent;
+
+        public Attenuation(float constant, float linear, float exponent) {
+            this.constant = constant;
+            this.linear = linear;
+            this.exponent = exponent;
+        }
+
+        public float getConstant() {
+            return constant;
+        }
+
+        public void setConstant(float constant) {
+            this.constant = constant;
+        }
+
+        public float getLinear() {
+            return linear;
+        }
+
+        public void setLinear(float linear) {
+            this.linear = linear;
+        }
+
+        public float getExponent() {
+            return exponent;
+        }
+
+        public void setExponent(float exponent) {
+            this.exponent = exponent;
+        }
+    }
 	
 }
