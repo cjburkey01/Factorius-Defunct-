@@ -23,8 +23,8 @@ import com.cjburkey.factorius.world.World;
 
 public class GameLogicCore implements IGameLogic {
 	
-	private final float cameraSpeed = 0.05f;
-	private final float cameraRotateSpeed = 1.0f;
+	private final float cameraSpeed = 0.1f;
+	private final float cameraRotateSpeed = 0.5f;
 	
 	private Renderer renderer;
 	private InputHandler input;
@@ -74,7 +74,7 @@ public class GameLogicCore implements IGameLogic {
 		renderer.init();
 		input = new InputHandler();
 		input.renderInit(window);
-		camMove = new CameraMovement(camera);
+		camMove = new CameraMovement(camera, cameraSpeed, cameraRotateSpeed);
 		camMove.init(window);
 	}
 
@@ -87,7 +87,7 @@ public class GameLogicCore implements IGameLogic {
 		for(GameObject obj : objs) {
 			renderer.render(window, camera, obj);
 		}
-		camMove.render(cameraRotateSpeed, cameraSpeed, window, input);
+		camMove.render(window, input);
 	}
 
 	public void renderCleanup(Window window) {
