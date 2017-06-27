@@ -13,6 +13,7 @@ import com.cjburkey.factorius.chunk.ChunkData;
 import com.cjburkey.factorius.chunk.ChunkGenerator;
 import com.cjburkey.factorius.chunk.MeshChunk;
 import com.cjburkey.factorius.object.GameObject;
+import com.cjburkey.factorius.render.Camera;
 import com.cjburkey.factorius.render.Renderer;
 import com.cjburkey.factorius.window.Window;
 import com.cjburkey.factorius.world.World;
@@ -21,37 +22,7 @@ public class GameLogicCore implements IGameLogic {
 	
 	private Renderer renderer;
 	private World world;
-	
-	/*private float[] verts = {
-			-0.5f, 0.5f, 0.5f,		// V0
-			-0.5f, -0.5f, 0.5f,		// V1
-			0.5f, -0.5f, 0.5f,		// V2
-			0.5f, 0.5f, 0.5f,		// V3
-			-0.5f, 0.5f, -0.5f,		// V4
-			0.5f, 0.5f, -0.5f,		// V5
-			-0.5f, -0.5f, -0.5f,	// V6
-			0.5f, -0.5f, -0.5f		// V7
-	};
-	
-	private int[] tris = {
-			0, 1, 3, 3, 1, 2,		// Front
-			4, 0, 3, 5, 4, 3,		// Top
-			3, 2, 7, 5, 3, 7,		// Right
-			6, 1, 0, 6, 0, 4,		// Left
-			2, 1, 6, 2, 6, 7,		// Bottom
-			7, 6, 4, 7, 4, 5		// Back
-	};
-	
-	private float[] uv = {
-			0.0f, 0.0f,
-			1.0f, 0.0f,
-			1.0f, 1.0f,
-			0.0f, 1.0f,
-	};
-	
-	private Texture texture = new Texture("factorius:texture/block/block_stone.png");
-	
-	private Mesh triangleTest;*/
+	private Camera camera;
 	
 	public GameLogicCore() {
 		world = new World();
@@ -61,6 +32,7 @@ public class GameLogicCore implements IGameLogic {
 	
 	public void gameInit() {
 		Blocks.init();
+		camera = new Camera();
 		ChunkData test = new ChunkData(new Vector3i());
 		ChunkGenerator.generate(test);
 		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, -1.35f), MeshChunk.buildChunkMesh(test)));
@@ -91,7 +63,7 @@ public class GameLogicCore implements IGameLogic {
 		window.setTitle(buildWindowTitle(window));
 		GameObject[] objs = world.getObjectsInWorld();
 		for(GameObject obj : objs) {
-			renderer.render(window, obj);
+			renderer.render(window, camera, obj);
 		}
 	}
 
