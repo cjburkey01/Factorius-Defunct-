@@ -1,12 +1,14 @@
 package com.cjburkey.factorius;
 
 import com.cjburkey.factorius.game.GameLogicHandler;
+import com.cjburkey.factorius.lang.LocalizationManager;
 import com.cjburkey.factorius.window.Window;
 
 public final class Factorius {
 	
 	public static Factorius self;
 
+	private LocalizationManager localManage;
 	private boolean doVsync = true;
 	private Window window;
 	private Loops loops;
@@ -26,6 +28,8 @@ public final class Factorius {
 	}
 	
 	private void init() {
+		localManage = new LocalizationManager();
+		localManage.loadLocals();
 		logic = new GameLogicHandler();
 		logic.loadLogic();
 		window = new Window();

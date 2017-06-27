@@ -28,6 +28,11 @@ public final class Resources {
 		return domain + ':' + path;
 	}
 	
+	public static String getNameFromPath(String path) {
+		String[] split = path.split("/");
+		return split[split.length - 1];
+	}
+	
 	public static InputStream getResource(String loc) {
 		String[] split = loc.split(":");
 		if(split.length == 2) {

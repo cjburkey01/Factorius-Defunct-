@@ -46,7 +46,7 @@ public class GameLogicCore implements IGameLogic {
 			0.0f, 1.0f,
 	};
 	
-	private Texture texture = new Texture("factorius:texture/basic/block_stone.png");
+	private Texture texture = new Texture("factorius:texture/block/block_stone.png");
 	
 	private Mesh triangleTest;
 	
