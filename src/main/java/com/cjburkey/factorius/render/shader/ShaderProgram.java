@@ -4,9 +4,13 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 import java.util.Map;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryStack;
 import com.cjburkey.factorius.Logger;
+import com.cjburkey.factorius.render.light.Material;
+import com.cjburkey.factorius.render.light.PointLight;
 
 public final class ShaderProgram {
 	
@@ -60,6 +64,23 @@ public final class ShaderProgram {
 		uniforms.put(name, location);
 	}
 	
+	public void createPointLightUniform(String name) throws Exception {
+		createUniform(name + ".color");
+		createUniform(name + ".position");
+		createUniform(name + ".intensity");
+		createUniform(name + ".att.constant");
+		createUniform(name + ".att.linear");
+		createUniform(name + ".att.exponent");
+	}
+	
+	public void createMaterialUniform(String name) throws Exception {
+		createUniform(name + ".ambient");
+        createUniform(name + ".diffuse");
+        createUniform(name + ".specular");
+        createUniform(name + ".hasTexture");
+        createUniform(name + ".reflectance");
+	}
+	
 	public void setUniform(String name, Matrix4f value) {
 		try(MemoryStack stack = MemoryStack.stackPush()) {
 			FloatBuffer fb = stack.mallocFloat(16);
@@ -70,6 +91,36 @@ public final class ShaderProgram {
 	
 	public void setUniform(String name, int value) {
 		GL20.glUniform1i(uniforms.get(name), value);
+	}
+	
+	public void setUniform(String name, float value) {
+		GL20.glUniform1f(uniforms.get(name), value);
+	}
+	
+	public void setUniform(String name, Vector3f value) {
+		GL20.glUniform3f(uniforms.get(name), value.x, value.y, value.z);
+	}
+	
+	public void setUniform(String name, Vector4f value) {
+		GL20.glUniform4f(uniforms.get(name), value.x, value.y, value.z, value.w);
+	}
+	
+	public void setUniform(String name, PointLight pointLight) {
+		setUniform(name + ".color", pointLight.getColor());
+		setUniform(name + ".position", pointLight.getPosition());
+		setUniform(name + ".intensity", pointLight.getIntensity());
+		PointLight.Attenuation att = pointLight.getAttenuation();
+		setUniform(name + ".att.constant", att.getConstant());
+		setUniform(name + ".att.linear", att.getLinear());
+		setUniform(name + ".att.exponent", att.getExponent());
+	}
+	
+	public void setUniform(String name, Material material) {
+		setUniform(name + ".ambient", material.getAmbientColor());
+		setUniform(name + ".diffuse", material.getDiffuseColor());
+		setUniform(name + ".specular", material.getSpecularColor());
+		setUniform(name + ".hasTexture", material.isTextured() ? 1 : 0);
+		setUniform(name + ".reflectance", material.getReflectance());
 	}
 	
 	public void bind() {

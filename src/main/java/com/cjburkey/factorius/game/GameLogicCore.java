@@ -18,6 +18,7 @@ import com.cjburkey.factorius.input.InputHandler;
 import com.cjburkey.factorius.object.GameObject;
 import com.cjburkey.factorius.render.Camera;
 import com.cjburkey.factorius.render.Renderer;
+import com.cjburkey.factorius.render.light.PointLight;
 import com.cjburkey.factorius.window.Window;
 import com.cjburkey.factorius.world.World;
 
@@ -31,6 +32,9 @@ public class GameLogicCore implements IGameLogic {
 	private World world;
 	private Camera camera;
 	private CameraMovement camMove;
+	
+	private Vector3f ambientLight;
+	private PointLight pointLight;
 	
 	public GameLogicCore() {
 		world = new World();
@@ -76,6 +80,17 @@ public class GameLogicCore implements IGameLogic {
 		input.renderInit(window);
 		camMove = new CameraMovement(camera, cameraSpeed, cameraRotateSpeed);
 		camMove.init(window);
+		
+		ambientLight = new Vector3f(0.0f, 0.0f, 0.0f);
+		Vector3f lightColor = new Vector3f(1.0f, 1.0f, 1.0f);
+		Vector3f lightPosition = new Vector3f(0.0f, 0.0f, 0.0f);
+		float lightIntensity = 10.0f;
+		pointLight = new PointLight(lightColor, lightPosition, lightIntensity);
+		PointLight.Attenuation att = new PointLight.Attenuation(0.0f, 0.0f, 1.0f);
+		pointLight.setAttenuation(att);
+		
+		lightPosition = new Vector3f(-1.0f, 0.0f, 0.0f);
+		lightColor = new Vector3f(1.0f, 1.0f, 1.0f);
 	}
 
 	public void renderUpdate(Window window) {
@@ -85,7 +100,7 @@ public class GameLogicCore implements IGameLogic {
 		window.setTitle(buildWindowTitle(window));
 		GameObject[] objs = world.getObjectsInWorld();
 		for(GameObject obj : objs) {
-			renderer.render(window, camera, obj);
+			renderer.render(window, camera, obj, ambientLight, pointLight);
 		}
 		camMove.render(window, input);
 	}

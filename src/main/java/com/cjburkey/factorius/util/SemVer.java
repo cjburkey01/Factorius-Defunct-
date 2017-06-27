@@ -1,11 +1,13 @@
 package com.cjburkey.factorius.util;
 
+import java.io.Serializable;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Static;
 
-public final class SemVer {
+public final class SemVer implements Serializable {
 	
-	private static final SemVer EMPTY = new SemVer(-1, -1, -1);
+	private static final long serialVersionUID = 7840730486471413385L;
+	public static final SemVer EMPTY = new SemVer(-1, -1, -1);
 	
 	private final int major, minor, patch;
 	

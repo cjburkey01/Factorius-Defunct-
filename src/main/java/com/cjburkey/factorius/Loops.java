@@ -34,7 +34,7 @@ public final class Loops {
 	
 	private void renderLoop(Window window) {
 		caps = GL.createCapabilities();
-		GL11.glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+		GL11.glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
 		Logger.info("Capabilities created and clear color set.");
 		Factorius.self.getLogicHandler().foreach((e) -> e.renderInit(window));
 		
