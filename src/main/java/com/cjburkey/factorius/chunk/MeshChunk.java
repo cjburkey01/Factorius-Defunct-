@@ -8,8 +8,21 @@ import com.cjburkey.factorius.block.Block;
 import com.cjburkey.factorius.render.Texture;
 import com.cjburkey.factorius.render.object.Mesh;
 
-public class MeshChunk {
+/**
+ * Controls OpenGL representations of chunks.
+ * @author cjburkey
+ */
+public final class MeshChunk {
 	
+	private static final Vector3f up = new Vector3f(0, 1, 0);
+	private static final Vector3f right = new Vector3f(1, 0, 0);
+	private static final Vector3f forward = new Vector3f(0, 0, 1);
+	
+	/**
+	 * Returns a mesh for a chunk.
+	 * @param chunk The chunk to render.
+	 * @return The mesh created from the chunk.
+	 */
 	public static Mesh buildChunkMesh(ChunkData chunk) {
 		List<Vector3f> verts = new ArrayList<>();
 		List<Integer> tris = new ArrayList<>();
@@ -55,9 +68,17 @@ public class MeshChunk {
 		return new Mesh(outVerts, outTris, outUvs, new Texture("factorius:texture/block/block_stone.png"));
 	}
 	
-	private static final Vector3f up = new Vector3f(0, 1, 0);
-	private static final Vector3f right = new Vector3f(1, 0, 0);
-	private static final Vector3f forward = new Vector3f(0, 0, 1);
+	/**
+	 * Adds a single block to the mesh.
+	 * @param block The block to add.
+	 * @param x The x coordinate.
+	 * @param y The y coordinate.
+	 * @param z The z coordinate.
+	 * @param chunk The current chunk.
+	 * @param verts The list of vertices.
+	 * @param tris The list of triangles.
+	 * @param uvs The list of texture-coordinates.
+	 */
 	private static void addBlock(Block block, int x, int y, int z, ChunkData chunk, List<Vector3f> verts, List<Integer> tris, List<Vector2f> uvs) {
 		if(!fullBlockAt(chunk, x - 1, y, z)) {
 			addFace(block, new Vector3f(x, y, z), up, forward, false, verts, tris, uvs);		// Left
@@ -81,6 +102,17 @@ public class MeshChunk {
 		}
 	}
 	
+	/**
+	 * Adds a single face to the mesh.
+	 * @param block The block to add.
+	 * @param corner The corner of the face.
+	 * @param up The upwards facing face.
+	 * @param right The right facing face.
+	 * @param rev Whether or not to reverse the drawing order.
+	 * @param verts The list of vertices.
+	 * @param tris The list of triangles.
+	 * @param uvs The list of texture-coordinates.
+	 */
 	private static void addFace(Block block, Vector3f corner, Vector3f up, Vector3f right, boolean rev, List<Vector3f> verts, List<Integer> tris, List<Vector2f> uvs) {
 		int index = verts.size();
 		
@@ -116,6 +148,14 @@ public class MeshChunk {
 		uvs.add(new Vector2f(1.0f, 0.0f));
 	}
 	
+	/**
+	 * Gets whether or not there is a full block at LOCAL BLOCK POSITION (x, y, z)
+	 * @param chunk The chunk to check.
+	 * @param x The local x coordinate.
+	 * @param y The local y coordinate.
+	 * @param z The local z coordinate.
+	 * @return Whether or not the block is whole.
+	 */
 	private static boolean fullBlockAt(ChunkData chunk, int x, int y, int z) {
 		Block b = chunk.getBlockAt(x, y, z);
 		if(b == null) return false;

@@ -2,6 +2,10 @@ package com.cjburkey.factorius;
 
 import com.cjburkey.factorius.util.SemVer;
 
+/**
+ * Contains unchanging values for Factorius.
+ * @author cjburkey
+ */
 public final class Static {
 	
 	public static final char COLON = ':';

@@ -22,7 +22,11 @@ import com.cjburkey.factorius.render.object.CameraMovement;
 import com.cjburkey.factorius.window.Window;
 import com.cjburkey.factorius.world.World;
 
-public class GameLogicCore implements IGameLogic {
+/**
+ * Controlls information about the base game.
+ * @author cjburkey
+ */
+public final class GameLogicCore implements IGameLogic {
 	
 	private final float cameraSpeed = 0.1f;
 	private final float cameraRotateSpeed = 0.5f;
@@ -34,12 +38,18 @@ public class GameLogicCore implements IGameLogic {
 	private Camera camera;
 	private CameraMovement camMove;
 	
+	/**
+	 * Create an instance of the core game.
+	 */
 	public GameLogicCore() {
 		world = new World();
 	}
 	
 	// -- LOGIC -- //
 	
+	/**
+	 * Called when the game loop begins.
+	 */
 	public void gameInit() {
 		Blocks.init();
 		camera = new Camera();
@@ -48,7 +58,10 @@ public class GameLogicCore implements IGameLogic {
 		ChunkGenerator.generate(test);
 		world.addObjectToWorld(new GameObject(new Vector3f(0.0f, 0.0f, 0.0f), MeshChunk.buildChunkMesh(test)));
 	}
-
+	
+	/**
+	 * Called every game tick.
+	 */
 	public void gameTick() {
 		if(camMove != null) {
 			Vector3f move = new Vector3f(camMove.getCameraChange());
@@ -65,13 +78,20 @@ public class GameLogicCore implements IGameLogic {
 			light = MathUtils.clamp(light, 0.0f, 1.0f);
 		}
 	}
-
+	
+	/**
+	 * Called when the game loop ends.
+	 */
 	public void gameCleanup() {
 		
 	}
 	
 	// -- RENDER -- //
-
+	
+	/**
+	 * Called when the render loop beings.
+	 * @param window
+	 */
 	public void renderInit(Window window) {
 		Logger.blank();
 		Logger.info("Factorius Version:\t" + Static.FACTORIUS_VERSION);
@@ -86,7 +106,11 @@ public class GameLogicCore implements IGameLogic {
 		camMove = new CameraMovement(camera, cameraSpeed, cameraRotateSpeed);
 		camMove.init(window);
 	}
-
+	
+	/**
+	 * Called every render update.
+	 * @param window
+	 */
 	public void renderUpdate(Window window) {
 		if(input.keyUp(GLFW.GLFW_KEY_ESCAPE)) {
 			Factorius.self.stopGame();
@@ -98,7 +122,11 @@ public class GameLogicCore implements IGameLogic {
 		}
 		camMove.render(window, input);
 	}
-
+	
+	/**
+	 * Called when the render loop ends.
+	 * @param window
+	 */
 	public void renderCleanup(Window window) {
 		renderer.cleanup();
 		GameObject[] objs = world.getObjectsInWorld();
@@ -107,6 +135,11 @@ public class GameLogicCore implements IGameLogic {
 		}
 	}
 	
+	/**
+	 * Builds a window title from FPS, UPS, and window size.
+	 * @param window The window
+	 * @return String for window title.
+	 */
 	private String buildWindowTitle(Window window) {
 		StringBuilder out = new StringBuilder();
 		out.append(Static.WINDOW_TITLE);

@@ -12,36 +12,71 @@ import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.io.GameFiles;
 import com.cjburkey.factorius.util.SemVer;
 
-public class GameSettings {
+/**
+ * Manager for core game settings.
+ * @author cjburkey
+ */
+public final class GameSettings {
 	
 	private final ConcurrentHashMap<String, Object> keys;
 	private final SettingsWriter writer;
 	
+	/**
+	 * Instantiate manager
+	 */
 	public GameSettings() {
 		keys = new ConcurrentHashMap<>();
 		writer = new SettingsWriter();
 	}
 	
+	/**
+	 * Set the key to the value.
+	 * @param key Key.
+	 * @param value Value.
+	 */
 	public void set(String key, Object value) {
 		keys.put(new String(key), value);
 	}
 	
+	/**
+	 * Writes the changes to the game settings file.
+	 * @throws IOException
+	 */
 	public void save() throws IOException {
 		writer.saveToFile();
 	}
 	
+	/**
+	 * Loads the game settings from the file.
+	 * Will overwrite any set values not saved.
+	 * @throws Exception
+	 */
 	public void load() throws Exception {
 		writer.loadFromFile();
 	}
 	
+	/**
+	 * Empties loaded game settings.
+	 */
 	public void empty() {
 		keys.clear();
 	}
 	
+	/**
+	 * Returns the value for a key.
+	 * @param key Key.
+	 * @return Value. Null if not set.
+	 */
 	public Object get(String key) {
 		return keys.get(key);
 	}
 	
+	/**
+	 * Returns the value for a key.
+	 * Cast to string if safe.
+	 * @param key Key.
+	 * @return Value. Null if not set or not string.
+	 */
 	public String getString(String key) {
 		Object at = get(key);
 		if(at != null && at instanceof String) {
@@ -50,6 +85,12 @@ public class GameSettings {
 		return null;
 	}
 	
+	/**
+	 * Returns the value for a key.
+	 * Cast to integer if safe.
+	 * @param key Key.
+	 * @return Value. Null if not set or not integer.
+	 */
 	public int getInteger(String key) {
 		Object at = get(key);
 		if(at != null && at instanceof Integer) {
@@ -58,6 +99,12 @@ public class GameSettings {
 		return -1;
 	}
 	
+	/**
+	 * Returns the value for a key.
+	 * Cast to long if safe.
+	 * @param key Key.
+	 * @return Value. Null if not set or not long.
+	 */
 	public long getLong(String key) {
 		Object at = get(key);
 		if(at != null && at instanceof Long) {
@@ -66,6 +113,12 @@ public class GameSettings {
 		return -1;
 	}
 	
+	/**
+	 * Returns the value for a key.
+	 * Cast to long if safe.
+	 * @param key Key.
+	 * @return Value. Null if not set or not long.
+	 */
 	public float getFloat(String key) {
 		Object at = get(key);
 		if(at != null && at instanceof Float) {
@@ -74,6 +127,12 @@ public class GameSettings {
 		return -1;
 	}
 	
+	/**
+	 * Returns the value for a key.
+	 * Cast to double if safe.
+	 * @param key Key.
+	 * @return Value. Null if not set or not double.
+	 */
 	public double getDouble(String key) {
 		Object at = get(key);
 		if(at != null && at instanceof Double) {
@@ -82,6 +141,12 @@ public class GameSettings {
 		return -1;
 	}
 	
+	/**
+	 * Returns the value for a key.
+	 * Cast to SemVer if safe.
+	 * @param key Key.
+	 * @return Value. Null if not set or not SemVer.
+	 */
 	public SemVer getSemVer(String key) {
 		Object at = get(key);
 		if(at != null && at instanceof SemVer) {
@@ -90,7 +155,16 @@ public class GameSettings {
 		return SemVer.EMPTY;
 	}
 	
+	/**
+	 * Handles the writing and reading of the settings file.
+	 * @author cjburkey
+	 */
 	private class SettingsWriter {
+		
+		/**
+		 * Saves current settings to the settings file.
+		 * @throws IOException
+		 */
 		public void saveToFile() throws IOException {
 			File f = GameFiles.getSettingsFile();
 			if(f.exists()) {
@@ -105,6 +179,10 @@ public class GameSettings {
 			Logger.info("Saved to settings file: " + f);
 		}
 		
+		/**
+		 * Overwrites current settings with those found in settings file.
+		 * @throws Exception
+		 */
 		public void loadFromFile() throws Exception {
 			File f = GameFiles.getSettingsFile();
 			if(f.exists()) {

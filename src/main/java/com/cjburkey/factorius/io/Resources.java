@@ -6,12 +6,22 @@ import java.util.List;
 import java.util.Scanner;
 import com.cjburkey.factorius.Logger;
 
+/**
+ * Handles in-jar resources for the game.
+ * @author cjburkey
+ */
 public final class Resources {
 	
 	private static final char SLASH = '/';
 	private static final String SLASHS = "/";
 	private static final String BSLASHS = "\\";
 	
+	/**
+	 * Converts domain and path to a resource location.
+	 * @param domain The domain of the files.
+	 * @param path The path to the specific file.
+	 * @return Location.
+	 */
 	public static String getLocation(String domain, String path) {
 		while(path.startsWith(SLASHS) || path.startsWith(BSLASHS)) {
 			path = path.substring(1);
@@ -28,11 +38,21 @@ public final class Resources {
 		return domain + ':' + path;
 	}
 	
+	/**
+	 * Returns a file name from a path.
+	 * @param path The path to the file.
+	 * @return The file name, including extension.
+	 */
 	public static String getNameFromPath(String path) {
 		String[] split = path.split("/");
 		return split[split.length - 1];
 	}
 	
+	/**
+	 * Gets a stream for a resource in the jar file.
+	 * @param loc The resource location.
+	 * @return InputStream for file, or null if file does not exist.
+	 */
 	public static InputStream getResource(String loc) {
 		String[] split = loc.split(":");
 		if(split.length == 2) {
@@ -47,6 +67,11 @@ public final class Resources {
 		return null;
 	}
 	
+	/**
+	 * Reads lines of a resource.
+	 * @param loc The resource location.
+	 * @return An array of lines
+	 */
 	public static String[] getResourceAsLines(String loc) {
 		List<String> out = new ArrayList<>();
 		InputStream stream = getResource(loc);
@@ -60,6 +85,11 @@ public final class Resources {
 		return out.toArray(new String[out.size()]);
 	}
 	
+	/**
+	 * Returns a single string containing the contents of a file.
+	 * @param loc The resource location.
+	 * @return A string, containing new-lines, for a file.
+	 */
 	public static String getResourceAsString(String loc) {
 		StringBuilder out = new StringBuilder();
 		String[] lines = getResourceAsLines(loc);

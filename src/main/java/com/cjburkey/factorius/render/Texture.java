@@ -8,16 +8,27 @@ import com.cjburkey.factorius.io.Resources;
 import de.matthiasmann.twl.utils.PNGDecoder;
 import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
-public class Texture {
+/**
+ * Stores and loads texture information.
+ * @author cjburkey
+ */
+public final class Texture {
 	
 	private String location;
 	private int id;
 	private boolean loaded = false;
 	
+	/**
+	 * Create a texture object.
+	 * @param location
+	 */
 	public Texture(String location) {
 		this.location = location;
 	}
 	
+	/**
+	 * Load the texture into memory.
+	 */
 	public void loadTexture() {
 		if(!loaded) {
 			loaded = true;
@@ -44,10 +55,18 @@ public class Texture {
 		}
 	}
 	
+	/**
+	 * Gets whether or not the texture has been loaded.
+	 * @return Loaded.
+	 */
 	public boolean isLoaded() {
 		return loaded;
 	}
 	
+	/**
+	 * Gets the OpenGL-assigned ID of the texture.
+	 * @return Texture id.
+	 */
 	public int getId() {
 		return id;
 	}

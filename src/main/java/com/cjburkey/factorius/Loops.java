@@ -5,6 +5,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLCapabilities;
 import com.cjburkey.factorius.window.Window;
 
+/**
+ * Controls game loops.
+ * @author cjburkey
+ */
 public final class Loops {
 	
 	private final int targetUps = 60;
@@ -24,6 +28,10 @@ public final class Loops {
 	private long fps = 0;
 	private long ups = 0;
 	
+	/**
+	 * Starts the game loops.
+	 * @param window The main GLFW window.
+	 */
 	public void startGame(Window window) {
 		gameLoop = new Thread(() -> gameLoop());
 		running = true;
@@ -32,6 +40,10 @@ public final class Loops {
 		renderLoop(window);
 	}
 	
+	/**
+	 * Starts the OpenGL render loop.
+	 * @param window The main GLFW window.
+	 */
 	private void renderLoop(Window window) {
 		caps = GL.createCapabilities();
 		GL11.glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
@@ -59,6 +71,9 @@ public final class Loops {
 		Logger.info("Finished render loop.");
 	}
 	
+	/**
+	 * Starts the game logic loop.
+	 */
 	private void gameLoop() {
 		Factorius.self.getLogicHandler().foreach((e) -> e.gameInit());
 		Logger.info("Starting game loop.");
@@ -73,6 +88,9 @@ public final class Loops {
 		Logger.info("Finished game loop.");
 	}
 	
+	/**
+	 * Called each game tick.
+	 */
 	private void tick() {
 		Factorius.self.getLogicHandler().foreach((e) -> e.gameTick());
 		
@@ -85,18 +103,33 @@ public final class Loops {
 		}
 	}
 	
+	/**
+	 * Stops the loops.
+	 */
 	public void stopGame() {
 		running = false;
 	}
 	
+	/**
+	 * Gets the latest frames-per-second record.
+	 * @return fps
+	 */
 	public long getFps() {
 		return fps;
 	}
 	
+	/**
+	 * Gets the latest updates-per-second record.
+	 * @return ups
+	 */
 	public long getUps() {
 		return ups;
 	}
 	
+	/**
+	 * Gets whether or not GLCapabilities have been created yet.
+	 * @return created
+	 */
 	public boolean hasCaps() {
 		return caps != null;
 	}

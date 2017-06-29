@@ -10,11 +10,18 @@ import com.cjburkey.factorius.Factorius;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.Static;
 
+/**
+ * Holds GLFW window instance.
+ * @author cjburkey
+ */
 public final class Window {
 	
 	private long window;
 	private int width, height;
-
+	
+	/**
+	 * Initialize GLFW
+	 */
 	public void initGlfw() {
 		GLFWErrorCallback.createPrint(System.err).set();
 		
@@ -32,6 +39,10 @@ public final class Window {
 		Logger.info("GLFW initialized.");
 	}
 	
+	/**
+	 * Create and initialize the game window.
+	 * @param vsync Whether or not to vSync
+	 */
 	public void createWindow(boolean vsync) {
 		width = 300;
 		height = 300;
@@ -51,11 +62,17 @@ public final class Window {
 		Logger.info("Window created.");
 	}
 	
+	/**
+	 * Show the window.
+	 */
 	public void openWindow() {
 		GLFW.glfwShowWindow(window);
 		Logger.info("Window shown.");
 	}
 	
+	/**
+	 * Destroy the window and end GLFW.
+	 */
 	public void cleanup() {
 		Callbacks.glfwFreeCallbacks(window);
 		GLFW.glfwDestroyWindow(window);
@@ -64,47 +81,86 @@ public final class Window {
 		Logger.info("Window cleaned up.");
 	}
 	
+	/**
+	 * Set the window size and update viewport.
+	 * @param width
+	 * @param height
+	 */
 	public void setSize(int width, int height) {
 		GLFW.glfwSetWindowSize(window, width, height);
 		updateSize(width, height);
 		centerOnScreen();
 	}
 	
+	/**
+	 * Center the window on the screen.
+	 */
 	public void centerOnScreen() {
 		GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		GLFW.glfwSetWindowPos(window, (vidmode.width() - width) / 2, (vidmode.height() - height) / 2);
 	}
 	
+	/**
+	 * Called every frame.
+	 */
 	public void perLoop() {
 		GLFW.glfwSwapBuffers(window);
 		GLFW.glfwPollEvents();
 	}
 	
+	/**
+	 * Set the window title.
+	 * @param title New title.
+	 */
 	public void setTitle(String title) {
 		GLFW.glfwSetWindowTitle(window, title);
 	}
 	
+	/**
+	 * Returns GLFW window identity.
+	 * @return Identity.
+	 */
 	public long getIdentity() {
 		return window;
 	}
 	
+	/**
+	 * Gets whether or not the window should close and end the game.
+	 * @return Should close.
+	 */
 	public boolean shouldClose() {
 		return GLFW.glfwWindowShouldClose(window);
 	}
 	
+	/**
+	 * Gets the current window width.
+	 * @return Width.
+	 */
 	public int getWidth() {
 		return width;
 	}
 	
+	/**
+	 * Gets the current window height.
+	 * @return Height.
+	 */
 	public int getHeight() {
 		return height;
 	}
 	
+	/**
+	 * Sets the GLFW window to half of the screen width and height.
+	 */
 	private void halfScreen() {
 		GLFWVidMode vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		setSize(vidmode.width() / 2, vidmode.height() / 2);
 	}
 	
+	/**
+	 * Update OpenGL and GLFW window size expectations.
+	 * @param width New width.
+	 * @param height New height.
+	 */
 	private void updateSize(int width, int height) {
 		this.width = width;
 		this.height = height;

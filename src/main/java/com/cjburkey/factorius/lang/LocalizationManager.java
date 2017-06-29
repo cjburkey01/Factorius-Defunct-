@@ -15,15 +15,25 @@ import org.reflections.util.ConfigurationBuilder;
 import com.cjburkey.factorius.Logger;
 import com.cjburkey.factorius.io.Resources;
 
-public class LocalizationManager {
+/**
+ * Handles game language translations.
+ * @author cjburkey
+ */
+public final class LocalizationManager {
 	
 	private final List<Localization> locals;
 	private Localization current;
 	
+	/**
+	 * Instantiate the manager
+	 */
 	public LocalizationManager() {
 		locals = new ArrayList<>();
 	}
 	
+	/**
+	 * Load locals from inside jar-file.
+	 */
 	public void loadLocals() {
 		Logger.info("Loading localizations.");
 		Reflections reflections = new Reflections(new ConfigurationBuilder().setScanners(new ResourcesScanner()).setUrls(ClasspathHelper.forPackage("")));
@@ -68,6 +78,11 @@ public class LocalizationManager {
 		Logger.info("Loaded localizations.");
 	}
 	
+	/**
+	 * Get a localized value from an unlocalized key.
+	 * @param key The unlocalized key.
+	 * @return The localized value.
+	 */
 	public String get(String key) {
 		if(current != null && current.hasKey(key)) {
 			current.getString(key);

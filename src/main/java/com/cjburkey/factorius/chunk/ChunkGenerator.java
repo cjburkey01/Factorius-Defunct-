@@ -3,8 +3,16 @@ package com.cjburkey.factorius.chunk;
 import java.util.concurrent.ThreadLocalRandom;
 import com.cjburkey.factorius.block.Blocks;
 
-public class ChunkGenerator {
+/**
+ * Controls generations of chunks.
+ * @author cjburkey
+ */
+public final class ChunkGenerator {
 	
+	/**
+	 * Generate provided chunk.
+	 * @param chunk Chunk to generate.
+	 */
 	public static void generate(ChunkData chunk) {
 		for(int x = 0; x < ChunkData.CHUNK_SIZE; x ++) {
 			for(int y = 0; y < ChunkData.CHUNK_SIZE; y ++) {

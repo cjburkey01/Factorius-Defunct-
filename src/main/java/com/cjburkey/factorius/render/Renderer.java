@@ -8,7 +8,11 @@ import com.cjburkey.factorius.object.GameObject;
 import com.cjburkey.factorius.render.shader.ShaderProgram;
 import com.cjburkey.factorius.window.Window;
 
-public class Renderer {
+/**
+ * Core render engine of the game.
+ * @author cjburkey
+ */
+public final class Renderer {
 	
 	private static final float FOV = (float) Math.toRadians(90.0f);
 	private static final float NEAR = 0.01f;
@@ -20,6 +24,9 @@ public class Renderer {
 	private Transformation transformation;
 	private Vector3f ambient = new Vector3f(0.2f, 0.2f, 0.2f);
 	
+	/**
+	 * Called when the render thread begins.
+	 */
 	public void init() {
 		try {
 			transformation = new Transformation();
@@ -41,6 +48,13 @@ public class Renderer {
 		}
 	}
 	
+	/**
+	 * Called for each object every render update.
+	 * @param window Main GLFW window.
+	 * @param camera Game camera.
+	 * @param object The object to render.
+	 * @param light The object's light value.
+	 */
 	public void render(Window window, Camera camera, GameObject object, float light) {
 		if(object != null && object.getMesh() != null) {
 			if(object.getMesh().hasShader()) {
@@ -66,6 +80,9 @@ public class Renderer {
 		}
 	}
 	
+	/**
+	 * Called when the render thread ends.
+	 */
 	public void cleanup() {
 		basicShader.cleanup();
 	}

@@ -9,7 +9,12 @@ import com.cjburkey.factorius.math.MathUtils;
 import com.cjburkey.factorius.render.Camera;
 import com.cjburkey.factorius.window.Window;
 
-public class CameraMovement {
+/**
+ * Controls movement of the camera.
+ * Will be removed when player is added.
+ * @author cjburkey
+ */
+public final class CameraMovement {
 
 	private final Vector2d cursorCurrent;
 	private final Vector2d cursorPrev;
@@ -21,6 +26,12 @@ public class CameraMovement {
 	
 	private final float rotationSpeed;
 	
+	/**
+	 * Instantiate camera movement.
+	 * @param camera The camera.
+	 * @param movementSpeed The movement speed.
+	 * @param rotationSpeed The rotation speed.
+	 */
 	public CameraMovement(Camera camera, float movementSpeed, float rotationSpeed) {
 		cursorCurrent = new Vector2d();
 		cursorPrev = new Vector2d();
@@ -31,6 +42,10 @@ public class CameraMovement {
 		this.rotationSpeed = rotationSpeed;
 	}
 	
+	/**
+	 * Called to initialize the camera movement.
+	 * @param window
+	 */
 	public void init(Window window) {
 		center.set(new Vector2d((double) window.getWidth() / 2.0d, (double) window.getHeight() / 2.0d));
 		
@@ -41,6 +56,11 @@ public class CameraMovement {
 		GLFW.glfwSetInputMode(window.getIdentity(), GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
 	}
 	
+	/**
+	 * Called every frame-render.
+	 * @param window The main GLFW window.
+	 * @param input The main input handler.
+	 */
 	public void render(Window window, InputHandler input) {
 		double deltaX = cursorCurrent.x - cursorPrev.x;
 		double deltaY = cursorCurrent.y - cursorPrev.y;
@@ -56,6 +76,10 @@ public class CameraMovement {
 		doMovement(input);
 	}
 	
+	/**
+	 * Called to do WASD movement.
+	 * @param input The main input handler.
+	 */
 	private void doMovement(InputHandler input) {
 		camChange.set(0, 0, 0);
 		if(input.keyPressed(GLFW.GLFW_KEY_W)) {
@@ -80,10 +104,18 @@ public class CameraMovement {
 		}
 	}
 	
+	/**
+	 * Change of cursor in a frame.
+	 * @return Delta.
+	 */
 	public Vector2f getCursorDelta() {
 		return cursorDelta;
 	}
 	
+	/**
+	 * Camera change.
+	 * @return Change.
+	 */
 	public Vector3f getCameraChange() {
 		return camChange;
 	}
