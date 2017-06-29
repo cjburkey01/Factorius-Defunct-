@@ -22,8 +22,8 @@ public final class GameObject {
 	 * @param mesh The mesh for the object.
 	 */
 	public GameObject(Vector3f position, Vector3f rotation, float scale, Mesh mesh) {
-		setPosition(position);
-		setRotation(rotation);
+		if(position != null) setPosition(position);
+		if(rotation != null) setRotation(rotation);
 		setScale(scale);
 		setMesh(mesh);
 	}
