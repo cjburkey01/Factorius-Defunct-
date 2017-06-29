@@ -1,10 +1,11 @@
-package com.cjburkey.factorius.block;
+package com.cjburkey.factorius.render.object;
 
 import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import com.cjburkey.factorius.input.InputHandler;
+import com.cjburkey.factorius.math.MathUtils;
 import com.cjburkey.factorius.render.Camera;
 import com.cjburkey.factorius.window.Window;
 
@@ -51,6 +52,7 @@ public class CameraMovement {
 			cursorPrev.y = cursorCurrent.y;
 			camera.rotate((float) deltaY * rotationSpeed, 0.0f, 0.0f);
 		}
+		camera.getRotation().x = MathUtils.clamp(camera.getRotation().x, -90, 90);
 		doMovement(input);
 	}
 	

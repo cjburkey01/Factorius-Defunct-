@@ -2,11 +2,9 @@ package com.cjburkey.factorius.render;
 
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 import org.lwjgl.opengl.GL11;
 import com.cjburkey.factorius.io.Resources;
 import com.cjburkey.factorius.object.GameObject;
-import com.cjburkey.factorius.render.light.PointLight;
 import com.cjburkey.factorius.render.shader.ShaderProgram;
 import com.cjburkey.factorius.window.Window;
 
@@ -20,6 +18,7 @@ public class Renderer {
 	private Matrix4f projectionMatrix;
 	private Matrix4f viewMatrix;
 	private Transformation transformation;
+	private Vector3f ambient = new Vector3f(0.2f, 0.2f, 0.2f);
 	
 	public void init() {
 		try {
@@ -33,11 +32,8 @@ public class Renderer {
 			basicShader.createUniform("projectionMatrix");
 			basicShader.createUniform("modelViewMatrix");
 			basicShader.createUniform("texture_sampler");
-
-			basicShader.createUniform("specularPower");
 			basicShader.createUniform("ambientLight");
-			basicShader.createPointLightUniform("pointLight");
-			basicShader.createMaterialUniform("material");
+			basicShader.createUniform("blockLight");
 			
 			GL11.glEnable(GL11.GL_DEPTH_TEST);
 		} catch(Exception e) {
@@ -45,7 +41,7 @@ public class Renderer {
 		}
 	}
 	
-	public void render(Window window, Camera camera, GameObject object, Vector3f ambientLight, PointLight pointLight) {
+	public void render(Window window, Camera camera, GameObject object, float light) {
 		if(object != null && object.getMesh() != null) {
 			if(object.getMesh().hasShader()) {
 				object.getMesh().getShader().bind();
@@ -55,24 +51,14 @@ public class Renderer {
 			
 			projectionMatrix = transformation.getProjectionMatrix(FOV, window, NEAR, FAR);
 			basicShader.setUniform("projectionMatrix", projectionMatrix);
+			basicShader.setUniform("blockLight", new Vector3f(light, light, light));
+			basicShader.setUniform("ambientLight", ambient);
 			
 			viewMatrix = transformation.getViewMatrix(camera);
-			
-			basicShader.setUniform("ambientLight", ambientLight);
-			basicShader.setUniform("specularPower", 10.0f);
-			PointLight currentLight = new PointLight(pointLight);
-			Vector3f lightPos = currentLight.getPosition();
-			Vector4f aux = new Vector4f(lightPos, 1.0f);
-			aux.mul(viewMatrix);
-			lightPos.x = aux.x;
-			lightPos.x = aux.y;
-			lightPos.z = aux.z;
-			basicShader.setUniform("pointLight", currentLight);
 			basicShader.setUniform("texture_sampler", 0);
 
 			Matrix4f modelViewMatrix = transformation.getModelViewMatrix(object, viewMatrix);
 			basicShader.setUniform("modelViewMatrix", modelViewMatrix);
-			basicShader.setUniform("material", object.getMesh().getMaterial());
 			
 			object.render();
 			

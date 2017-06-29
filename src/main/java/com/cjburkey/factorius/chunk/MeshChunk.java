@@ -6,7 +6,6 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 import com.cjburkey.factorius.block.Block;
 import com.cjburkey.factorius.render.Texture;
-import com.cjburkey.factorius.render.light.Material;
 import com.cjburkey.factorius.render.object.Mesh;
 
 public class MeshChunk {
@@ -53,7 +52,7 @@ public class MeshChunk {
 			i ++;
 		}
 		
-		return new Mesh(outVerts, outTris, outUvs, new Material(new Texture("factorius:texture/block/block_stone.png"), 1.0f));
+		return new Mesh(outVerts, outTris, outUvs, new Texture("factorius:texture/block/block_stone.png"));
 	}
 	
 	private static final Vector3f up = new Vector3f(0, 1, 0);

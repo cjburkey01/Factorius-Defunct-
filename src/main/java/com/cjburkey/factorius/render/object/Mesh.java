@@ -9,7 +9,6 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 import org.lwjgl.system.MemoryUtil;
 import com.cjburkey.factorius.render.Texture;
-import com.cjburkey.factorius.render.light.Material;
 import com.cjburkey.factorius.render.shader.ShaderProgram;
 
 public class Mesh {
@@ -17,7 +16,7 @@ public class Mesh {
 	private final float[] verts;
 	private final int[] tris;
 	private final float[] uv;
-	private final Material material;
+	private final Texture texture;
 
 	private ShaderProgram shader;
 	private int coordVao;
@@ -27,16 +26,16 @@ public class Mesh {
 	private int vertexCount;
 	private boolean built = false;
 	
-	public Mesh(float[] verts, int[] tris, float[] uv, Material material) {
-		this(null, verts, tris, uv, material);
+	public Mesh(float[] verts, int[] tris, float[] uv, Texture texture) {
+		this(null, verts, tris, uv, texture);
 	}
 	
-	public Mesh(ShaderProgram shader, float[] verts, int[] tris, float[] uv, Material material) {
+	public Mesh(ShaderProgram shader, float[] verts, int[] tris, float[] uv, Texture texture) {
 		this.shader = shader;
 		this.verts = verts;
 		this.tris = tris;
 		this.uv = uv;
-		this.material = material;
+		this.texture = texture;
 		vertexCount = tris.length;
 	}
 	
@@ -77,13 +76,12 @@ public class Mesh {
 	}
 	
 	public void render() {
-		if(material.isTextured()) {
-			Texture t = material.getTexture();
-			if(!t.isLoaded()) {
-				t.loadTexture();
+		if(texture != null) {
+			if(!texture.isLoaded()) {
+				texture.loadTexture();
 			}
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, t.getId());
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture.getId());
 		}
 		
 		GL30.glBindVertexArray(coordVao);
@@ -129,8 +127,8 @@ public class Mesh {
 		return shader;
 	}
 	
-	public Material getMaterial() {
-		return material;
+	public Texture getTexture() {
+		return texture;
 	}
 	
 }

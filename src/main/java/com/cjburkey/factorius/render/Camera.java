@@ -40,6 +40,16 @@ public class Camera {
 		rotation.x += x;
 		rotation.y += y;
 		rotation.z += z;
+		
+		if(rotation.x > 360) {
+			rotation.x -= 360;
+		}
+		if(rotation.y > 360) {
+			rotation.y -= 360;
+		}
+		if(rotation.z > 360) {
+			rotation.z -= 360;
+		}
 	}
 	
 	public Vector3f getPosition() {
