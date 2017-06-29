@@ -54,22 +54,22 @@ public final class ChunkData {
 	}
 	
 	/**
+	 * Gets the CHUNK POSITION of this chunk.
+	 * @return The position.
+	 */
+	public Vector3i getPosition() {
+		return new Vector3i(chunkPos);
+	}
+	
+	/**
 	 * Gets whether or not the coordinates are in the chunk.
 	 * @param x The local x coordinate.
 	 * @param y The local y coordinate.
 	 * @param z The local z coordinate.
 	 * @return Whether or not in chunk.
 	 */
-	public boolean inChunk(int x, int y, int z) {
+	public static boolean inChunk(int x, int y, int z) {
 		return x >= 0 && y >= 0 && z >= 0 && x < CHUNK_SIZE && y < CHUNK_SIZE && z < CHUNK_SIZE;
-	}
-	
-	/**
-	 * Gets the CHUNK POSITION of this chunk.
-	 * @return The position.
-	 */
-	public Vector3i getPosition() {
-		return new Vector3i(chunkPos);
 	}
 	
 }

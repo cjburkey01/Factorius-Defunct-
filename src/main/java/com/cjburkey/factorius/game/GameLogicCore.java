@@ -30,7 +30,7 @@ public final class GameLogicCore implements IGameLogic {
 	
 	private final float cameraSpeed = 0.1f;
 	private final float cameraRotateSpeed = 0.5f;
-	private float light = 0.2f;
+	private float light = 0.8f;
 	
 	private Renderer renderer;
 	private InputHandler input;

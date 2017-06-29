@@ -157,6 +157,7 @@ public final class MeshChunk {
 	 * @return Whether or not the block is whole.
 	 */
 	private static boolean fullBlockAt(ChunkData chunk, int x, int y, int z) {
+		if(!ChunkData.inChunk(x, y, z)) return true;
 		Block b = chunk.getBlockAt(x, y, z);
 		if(b == null) return false;
 		return b.isFullBlock();
